@@ -51,7 +51,9 @@ export default function useApplicationData() {
       ...state,
       appointments
     });
-    return axios.put(`/api/appointments/${id}`, { interview })
+    console.log("ID: ", id);
+    console.log("interview", interview);
+    return axios.put(`http://localhost:8001/api/appointments/${id}`, { interview })
       .then(() => {
         setState(state => ({ ...state, appointments }))
       })
@@ -61,7 +63,7 @@ export default function useApplicationData() {
   }
 
   function cancelInterview(id) {
-    return axios.delete(`/api/appointments/${id}`)
+    return axios.delete(`http://localhost:8001/api/appointments/${id}`)
       .then(() => {
         const appointment = {
           ...state.appointments[id],
