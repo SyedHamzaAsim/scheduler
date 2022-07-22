@@ -25,6 +25,7 @@ function Appointment(props) {
     props.interview ? SHOW : EMPTY
   );
 
+  //save function to pass as prop
   function onSave(name, interviewer) {
     const interview = {
       student: name,
@@ -39,19 +40,22 @@ function Appointment(props) {
     })
   }
 
+  //edit function, transitions to edit mode and gets passed as a prop
   function onEdit() {
     transition(EDIT);
   };
 
+  //cancel function, just goes back to the previous mode
   function onCancel() {
     back();
   };
 
-
+  //delete button pressed but no confirm
   function removeAppointment() {
     transition(CONFIRM);
   };
 
+  //confirmed delete, destroys the appointment
   function destroy(event) {
     transition(DELETE, true);
     props
