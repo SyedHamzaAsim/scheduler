@@ -1,7 +1,6 @@
 import React from "react";
 
-import "components/Button.scss";
-import classNames from "classnames";
+import "./Button.scss";
 
 export default function Button(props) {
   let buttonClass = "button";
