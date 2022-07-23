@@ -3,6 +3,7 @@ import axios from "axios";
 
 export default function useApplicationData() {
 
+  
   const [state, setState] = useState({
     day: 'Monday',
     days: [],
@@ -10,8 +11,10 @@ export default function useApplicationData() {
     interviewers: {}
   })
 
+  // setday function to export
   const setDay = day => setState({ ...state, day });
 
+  //axios get requests to the api server
   useEffect(() => {
     Promise.all([
       axios.get(`http://localhost:8001/api/days`),
@@ -27,6 +30,7 @@ export default function useApplicationData() {
     });
   }, []);
 
+  // update spots function
   function updateSpots(state) {
     const currentDay = state.days[state.days.findIndex((day) => day.name === state.day)];
     const newSpots = currentDay.appointments.filter(
@@ -38,6 +42,7 @@ export default function useApplicationData() {
     return updatedDays;
   }
 
+  // Makes a put command to the api server using id and interview
   function bookInterview(id, interview) {
     const appointment = {
       ...state.appointments[id],
@@ -51,8 +56,6 @@ export default function useApplicationData() {
       ...state,
       appointments
     });
-    console.log("ID: ", id);
-    console.log("interview", interview);
     return axios.put(`http://localhost:8001/api/appointments/${id}`, { interview })
       .then(() => {
         setState(state => ({ ...state, appointments }))
@@ -62,6 +65,7 @@ export default function useApplicationData() {
       }))
   }
 
+  //function for cancelling the interview, makes a delete requewst to axios and doesn't add interview
   function cancelInterview(id) {
     return axios.delete(`http://localhost:8001/api/appointments/${id}`)
       .then(() => {
@@ -81,6 +85,7 @@ export default function useApplicationData() {
       }))
   }
 
+  //exporting functions
   return {
     state,
     setDay,
