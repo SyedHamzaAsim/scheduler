@@ -31,15 +31,23 @@ export default function useApplicationData() {
   }, []);
 
   // update spots function
-  function updateSpots(state) {
-    const currentDay = state.days[state.days.findIndex((day) => day.name === state.day)];
-    const newSpots = currentDay.appointments.filter(
-      (id) => state.appointments[id].interview == null
-    ).length;
-    const index = state.days.findIndex((day) => day.name === state.day);
-    const updatedDays = [...state.days];
-    updatedDays[index] = { ...currentDay, newSpots };
-    return updatedDays;
+  function updateSpots(appointments) {
+    return state.days.map((day) => {
+      let freeSpots = 0;
+      for (let appointment of day.appointments) {
+        if (!appointments[appointment].interview) {
+          freeSpots++;
+        }
+      }
+      return {...day, spots: freeSpots}
+    })
+    // const newSpots = currentDay.appointments.filter(
+    //   (id) => state.appointments[id].interview == null
+    // ).length;
+    // const index = state.days.findIndex((day) => day.name === state.day);
+    // const updatedDays = [...state.days];
+    // updatedDays[index] = { ...currentDay, newSpots };
+    // return updatedDays;
   }
 
   // Makes a put command to the api server using id and interview
@@ -52,37 +60,32 @@ export default function useApplicationData() {
       ...state.appointments,
       [id]: appointment
     };
-    setState({
-      ...state,
-      appointments
-    });
+    // setState({
+    //   ...state,
+    //   appointments
+    // });
     return axios.put(`http://localhost:8001/api/appointments/${id}`, { interview })
       .then(() => {
-        setState(state => ({ ...state, appointments }))
+        setState(state => ({ ...state, appointments, days: updateSpots(appointments)}))
       })
-      .then(setState((prev) => {
-        return { ...prev, days: updateSpots(prev) }
-      }))
   }
 
   //function for cancelling the interview, makes a delete requewst to axios and doesn't add interview
   function cancelInterview(id) {
-    return axios.delete(`http://localhost:8001/api/appointments/${id}`)
-      .then(() => {
-        const appointment = {
-          ...state.appointments[id],
-          interview: null
-        };
+    const appointment = {
+      ...state.appointments[id],
+      interview: null
+    };
 
-        const appointments = {
-          ...state.appointments,
-          [id]: appointment
-        };
-        setState(state => ({ ...state, appointments }))
-      })
-      .then(setState((prev) => {
-        return { ...prev, days: updateSpots(prev) }
-      }))
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+    
+    return axios.delete(`http://localhost:8001/api/appointments/${id}`)
+    .then(() => {
+      setState(state => ({ ...state, appointments, days: updateSpots(appointments)}))
+    })
   }
 
   //exporting functions
