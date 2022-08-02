@@ -3,6 +3,8 @@ import axios from "axios";
 
 export default function useApplicationData() {
 
+  axios.defaults.baseURL = 'http://localhost:8001/';
+
   
   const [state, setState] = useState({
     day: 'Monday',
@@ -17,9 +19,9 @@ export default function useApplicationData() {
   //axios get requests to the api server
   useEffect(() => {
     Promise.all([
-      axios.get(`http://localhost:8001/api/days`),
-      axios.get(`http://localhost:8001/api/appointments`),
-      axios.get(`http://localhost:8001/api/interviewers`)
+      axios.get(`api/days`),
+      axios.get(`api/appointments`),
+      axios.get(`api/interviewers`)
     ]).then((all) => {
       setState(prev => ({
         ...prev,
@@ -64,7 +66,7 @@ export default function useApplicationData() {
     //   ...state,
     //   appointments
     // });
-    return axios.put(`http://localhost:8001/api/appointments/${id}`, { interview })
+    return axios.put(`api/appointments/${id}`, { interview })
       .then(() => {
         setState(state => ({ ...state, appointments, days: updateSpots(appointments)}))
       })
@@ -82,7 +84,7 @@ export default function useApplicationData() {
       [id]: appointment
     };
     
-    return axios.delete(`http://localhost:8001/api/appointments/${id}`)
+    return axios.delete(`api/appointments/${id}`)
     .then(() => {
       setState(state => ({ ...state, appointments, days: updateSpots(appointments)}))
     })
