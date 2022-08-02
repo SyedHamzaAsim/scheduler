@@ -22,6 +22,16 @@ npm test
 npm run storybook
 ```
 
+## Dependencies
+
+React
+Cypress
+Axios
+Storybook
+Classnames
+Normalize.css
+
+
 ## Home page
 
 !["screenshot of Home page"](https://github.com/SyedHamzaAsim/scheduler/blob/master/Pics/Opening.png?raw=true)
