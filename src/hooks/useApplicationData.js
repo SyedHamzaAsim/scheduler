@@ -1,11 +1,9 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+const baseUrl = 'http://localhost:8001';
 
 export default function useApplicationData() {
 
-  axios.defaults.baseURL = 'http://localhost:8001/';
-
-  
   const [state, setState] = useState({
     day: 'Monday',
     days: [],
@@ -19,9 +17,9 @@ export default function useApplicationData() {
   //axios get requests to the api server
   useEffect(() => {
     Promise.all([
-      axios.get(`api/days`),
-      axios.get(`api/appointments`),
-      axios.get(`api/interviewers`)
+      axios.get(`${baseUrl}/api/days`),
+      axios.get(`${baseUrl}/api/appointments`),
+      axios.get(`${baseUrl}/api/interviewers`)
     ]).then((all) => {
       setState(prev => ({
         ...prev,
@@ -41,15 +39,8 @@ export default function useApplicationData() {
           freeSpots++;
         }
       }
-      return {...day, spots: freeSpots}
+      return { ...day, spots: freeSpots }
     })
-    // const newSpots = currentDay.appointments.filter(
-    //   (id) => state.appointments[id].interview == null
-    // ).length;
-    // const index = state.days.findIndex((day) => day.name === state.day);
-    // const updatedDays = [...state.days];
-    // updatedDays[index] = { ...currentDay, newSpots };
-    // return updatedDays;
   }
 
   // Makes a put command to the api server using id and interview
@@ -62,13 +53,9 @@ export default function useApplicationData() {
       ...state.appointments,
       [id]: appointment
     };
-    // setState({
-    //   ...state,
-    //   appointments
-    // });
-    return axios.put(`api/appointments/${id}`, { interview })
+    return axios.put(`${baseUrl}/api/appointments/${id}`, { interview })
       .then(() => {
-        setState(state => ({ ...state, appointments, days: updateSpots(appointments)}))
+        setState(state => ({ ...state, appointments, days: updateSpots(appointments) }))
       })
   }
 
@@ -83,11 +70,11 @@ export default function useApplicationData() {
       ...state.appointments,
       [id]: appointment
     };
-    
-    return axios.delete(`api/appointments/${id}`)
-    .then(() => {
-      setState(state => ({ ...state, appointments, days: updateSpots(appointments)}))
-    })
+
+    return axios.delete(`${baseUrl}/api/appointments/${id}`)
+      .then(() => {
+        setState(state => ({ ...state, appointments, days: updateSpots(appointments) }))
+      })
   }
 
   //exporting functions

@@ -1,4 +1,3 @@
-import React from "react";
 //getting the appointments from day
 export const getAppointmentsForDay = (state, day)=> {
   if (state.days.length === 0){

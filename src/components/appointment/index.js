@@ -34,10 +34,9 @@ function Appointment(props) {
     transition(SAVING);
     props.bookInterview(props.id, interview)
     .then(() => transition(SHOW))
-    .catch((error) => {
-      console.log("Error: ", error);
-      transition(ERROR_SAVE, true);
-    })
+    .catch((error) =>
+      transition(ERROR_SAVE, true)
+    )
   }
 
   //edit function, transitions to edit mode and gets passed as a prop
@@ -105,13 +104,13 @@ function Appointment(props) {
       {mode === ERROR_DELETE && 
         <Error
           message="An Error has occured while Deleting"
-          onClose={onCancel}
+          onClose={back}
         />}
 
       {mode === ERROR_SAVE && 
         <Error
           message="An Error has occured while Saving"
-          onClose={onCancel}
+          onClose={back}
         />}
 
       {mode === SAVING && <Status message={"Saving"} />}

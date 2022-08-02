@@ -1,5 +1,4 @@
 import React from "react";
-import axios from "axios";
 import "./Application.scss";
 import DayList from "./DayList";
 import Appointment from "./appointment";
