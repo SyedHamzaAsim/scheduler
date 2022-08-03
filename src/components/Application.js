@@ -7,11 +7,11 @@ import useApplicationData from "hooks/useApplicationData";
 
 export default function Application(props) {
 
-  
+
   const { state, setDay, bookInterview, cancelInterview } = useApplicationData();
   const dailyAppointments = getAppointmentsForDay(state, state.day);
   const interviewers = getInterviewersForDay(state, state.day);
-  
+
 
   const mappedAppointments = dailyAppointments.map((appointment) => {
     const interview = getInterview(state, appointment.interview);
@@ -43,6 +43,7 @@ export default function Application(props) {
             days={state.days}
             value={state.day}
             onChange={setDay}
+            selectedDay={state.day}
           />
         </nav>
         <img
